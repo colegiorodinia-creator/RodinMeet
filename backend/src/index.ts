@@ -125,6 +125,14 @@ app.post('/api/upload', uploadLimiter, upload.single('video'), async (req, res) 
   }
 });
 
+// Servir frontend
+const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendDistPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
+});
+
 app.listen(port, () => {
   console.log(`RodinMeet Backend rodando na porta ${port}`);
 });

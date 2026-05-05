@@ -8,6 +8,10 @@ build/
 backend/node_modules/
 backend/dist/
 backend/.env
+backend/credentials.json
+backend/service-account.json
+backend/token.json
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+
