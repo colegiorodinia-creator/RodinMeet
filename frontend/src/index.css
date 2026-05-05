@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Cores de Fundo (Apple Dark Mode) */
+  --bg-color: #000000;
+  --bg-secondary: #1c1c1e;
+  
+  /* Cores da Marca */
+  --accent-color: #f97316; /* Laranja da marca */
+  --accent-hover: #ea580c;
+  --accent-glow: rgba(249, 115, 22, 0.4);
+  
+  /* Cores de Texto */
+  --text-primary: #ffffff;
+  --text-secondary: #ebebf5;
+  --text-muted: rgba(235, 235, 245, 0.6);
+  
+  /* Estado */
+  --danger-color: #ff453a;
+  --danger-hover: #ff3b30;
+  --danger-glow: rgba(255, 69, 58, 0.4);
+  
+  /* Efeito Liquid Glass */
+  --glass-bg: rgba(28, 28, 30, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-highlight: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  
+  /* Tipografia Padrão Apple */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Fundo sutil com gradiente escuro premium */
+  background-image: radial-gradient(circle at top right, #1a1a1f 0%, #000000 60%);
+  background-attachment: fixed;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 
+  Liquid Glass Effect 
+  Alta saturação, blur profundo, sombra elegante e borda sutil 
+*/
+.liquid-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  border-radius: 24px; /* Mais arredondado */
+}
+
+/* Tipografia Estilizada */
+h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+p {
+  line-height: 1.5;
+}
+
+/* Entradas de Texto (Inputs e Selects) */
+input, select, button {
+  font-family: var(--font-family);
+  outline: none;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-radius: 14px; /* Squircles */
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  backdrop-filter: blur(10px);
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus, select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Botões Pílula e Estilo Apple */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 999px; /* Botão formato pílula */
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button.primary {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+button.primary:hover:not(:disabled) {
+  box-shadow: 0 6px 20px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+button.danger {
+  background: linear-gradient(135deg, var(--danger-color), var(--danger-hover));
+  color: white;
+  box-shadow: 0 4px 14px var(--danger-glow);
+}
+
+button.danger:hover:not(:disabled) {
+  box-shadow: 0 6px 20px var(--danger-glow);
+  transform: translateY(-1px);
+}
+
+/* Animações Premium */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Recording Border Animation */
+@keyframes recordingPulse {
+  0% { box-shadow: inset 0 0 0 4px rgba(255, 69, 58, 0.8); }
+  50% { box-shadow: inset 0 0 0 4px rgba(255, 69, 58, 0.2); }
+  100% { box-shadow: inset 0 0 0 4px rgba(255, 69, 58, 0.8); }
+}
+
+.recording-border {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  animation: recordingPulse 2s infinite ease-in-out;
+  z-index: 9999;
+}
+
+/* Ocultar elementos desnecessários do LiveKit, se aplicável */
+/* Customização agressiva do Tema do LiveKit para combinar com a marca */
+.lk-room-container {
+  background-color: var(--bg-color) !important;
+  --lk-bg: var(--bg-color);
+  --lk-control-bg: rgba(28, 28, 30, 0.6);
+  --lk-control-hover-bg: rgba(40, 40, 45, 0.8);
+  --lk-control-active-bg: var(--accent-color);
+  --lk-control-active-hover-bg: var(--accent-hover);
+  --lk-border-radius: 16px !important;
+  --lk-accent: var(--accent-color) !important;
+  --lk-primary: var(--accent-color) !important;
+  --lk-brand: var(--accent-color) !important;
+  --lk-accent-color: var(--accent-color) !important;
+  --lk-accent-bg: var(--accent-color) !important;
+  --lk-danger: var(--danger-color);
+  font-family: var(--font-family);
+}
+
+.lk-control-bar {
+  background-color: rgba(20, 20, 20, 0.8) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 0 !important;
+}
+
+.lk-button {
+  border-radius: 999px !important;
+}
+
+/* Override do Active Speaker (Foco de quem está falando) */
+.lk-participant-tile,
+.lk-participant-tile video,
+.lk-participant-tile .lk-video-container {
+  transition: box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.lk-participant-tile[data-lk-speaking="true"],
+.lk-participant-tile.lk-speaking,
+.lk-participant-tile:focus-within,
+.lk-participant-tile[data-lk-local-participant="true"][data-lk-speaking="true"] {
+  outline: none !important;
+  border: none !important;
+  /* Brilho externo super macio + Fina borda interna para cobrir qualquer imperfeição do vídeo */
+  box-shadow: 0 0 25px 5px var(--accent-glow), inset 0 0 0 2px var(--accent-color) !important;
+  z-index: 10;
+}
+
+.lk-focus-layout-wrapper,
+.lk-grid-layout-wrapper {
+  --lk-accent: var(--accent-color) !important;
+}
+
+/* Overlays do vídeo (Nome, Qualidade de Conexão, Microfone) com Liquid Glass */
+.lk-participant-metadata {
+  background: transparent !important; /* Remove o gradiente escuro padrão do LiveKit */
+}
+
+.lk-participant-metadata > *,
+.lk-connection-quality {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+  border-radius: 8px !important;
+  margin: 4px;
+}
+
+.lk-connection-quality {
+  padding: 4px !important;
+}
+
+/* Toast Notification (Popup customizado) */
+.custom-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 4px 20px var(--accent-glow);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  z-index: 10000;
+  animation: fadeInUp 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Scrollbar Customizada Premium */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
