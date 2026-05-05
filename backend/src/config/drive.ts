@@ -6,20 +6,32 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.file', 'https://www.googl
 
 async function getAuthClient() {
   try {
-    const content = fs.readFileSync('./credentials.json', 'utf8');
-    const credentials = JSON.parse(content);
+    let credentials;
+    if (process.env.GOOGLE_CREDENTIALS_JSON) {
+      credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON);
+    } else {
+      const content = fs.readFileSync('./credentials.json', 'utf8');
+      credentials = JSON.parse(content);
+    }
     const { client_secret, client_id } = credentials.installed;
     
     // Configura o cliente OAuth2
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, "http://localhost:3000/oauth2callback");
     
     // Lê o token gerado anteriormente
-    const token = fs.readFileSync('./token.json', 'utf8');
-    oAuth2Client.setCredentials(JSON.parse(token));
+    let tokenData;
+    if (process.env.GOOGLE_TOKEN_JSON) {
+      tokenData = JSON.parse(process.env.GOOGLE_TOKEN_JSON);
+    } else {
+      const token = fs.readFileSync('./token.json', 'utf8');
+      tokenData = JSON.parse(token);
+    }
+    
+    oAuth2Client.setCredentials(tokenData);
     
     return oAuth2Client;
   } catch (error) {
-    console.error('Aviso: Arquivo credentials.json ou token.json não encontrado. O upload para o Google Drive falhará ou rodará em modo mock.');
+    console.error('Aviso: Arquivo credentials.json ou token.json (ou variáveis de ambiente) não encontrado. O upload para o Google Drive falhará ou rodará em modo mock.', error);
     return null; // Retorna null se não houver credenciais para facilitar os testes locais
   }
 }
