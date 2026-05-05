@@ -41,5 +41,4 @@ COPY --from=builder /app/backend/package.json ./backend/
 # Expose backend port
 EXPOSE 5000
 
-# Start command
-CMD ["node", "backend/dist/index.js"]
+CMD ["sh", "-c", "node backend/dist/index.js || { echo 'App crashed'; sleep 3600; }"]
