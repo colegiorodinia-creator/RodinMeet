@@ -92,6 +92,36 @@ export function Room() {
       if (leaveBtn && leaveBtn.textContent === 'Leave') {
         leaveBtn.textContent = 'Sair';
       }
+
+      // Tradução dos textos internos dos botões do ControlBar
+      const translations: Record<string, string> = {
+        'Microphone': 'Microfone',
+        'Camera': 'Câmera',
+        'Share screen': 'Compartilhar tela',
+        'Stop sharing': 'Parar compartilhamento',
+        'Chat': 'Bate-papo',
+        'Leave': 'Sair'
+      };
+
+      document.querySelectorAll('.lk-button').forEach((btn) => {
+        btn.childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+            const originalText = node.textContent.trim();
+            if (translations[originalText]) {
+              node.textContent = node.textContent.replace(originalText, translations[originalText]);
+            }
+          }
+        });
+      });
+
+      // Mover o botão de gravação para a barra de controle
+      const controlGroup = document.querySelector('.lk-control-bar .lk-button-group');
+      const recorderBtn = document.querySelector('.recorder-wrapper');
+      if (controlGroup && recorderBtn && recorderBtn.parentElement !== controlGroup) {
+        controlGroup.appendChild(recorderBtn);
+        // Resetar o position para alinhar flex com os outros botões
+        (recorderBtn as HTMLElement).style.position = 'static';
+      }
     }, 1000);
 
     return () => clearInterval(translateUI);

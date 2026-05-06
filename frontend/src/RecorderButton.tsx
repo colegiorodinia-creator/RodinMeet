@@ -158,22 +158,13 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
       <div className="recorder-wrapper" style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
         {!isRecording ? (
           <button 
-            className="liquid-glass"
+            className="lk-button"
             onClick={startRecording} 
             disabled={isUploading}
             title={isUploading ? 'Enviando...' : 'Gravar'}
             style={{ 
-              margin: 0, 
-              padding: '8px 16px', 
-              border: 'none', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: '8px', 
               cursor: isUploading ? 'not-allowed' : 'pointer',
-              opacity: isUploading ? 0.6 : 1,
-              color: 'white',
-              fontWeight: 500
+              opacity: isUploading ? 0.6 : 1
             }}
           >
             {isUploading ? (
@@ -194,20 +185,11 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
           </button>
         ) : (
           <button 
-            className="liquid-glass"
+            className="lk-button"
             onClick={stopRecording}
             title="Parar Gravação"
             style={{ 
-              margin: 0, 
-              padding: '8px 16px', 
-              border: 'none', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: '8px', 
               cursor: 'pointer',
-              color: 'white',
-              fontWeight: 500,
               animation: 'recordingPulse 1.5s infinite'
             }}
           >
