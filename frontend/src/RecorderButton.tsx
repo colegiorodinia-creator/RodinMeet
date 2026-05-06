@@ -155,7 +155,7 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
         </div>
       )}
       {isRecording && <div className="recording-border"></div>}
-      <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
+      <div className="recorder-wrapper" style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
         {!isRecording ? (
           <button 
             className="liquid-glass"

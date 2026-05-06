@@ -316,3 +316,10 @@ button.danger:hover:not(:disabled) {
     transform: rotate(360deg);
   }
 }
+
+/* Ocultar botão de gravar no mobile (resolução < 768px) */
+@media (max-width: 768px) {
+  .recorder-wrapper {
+    display: none !important;
+  }
+}
