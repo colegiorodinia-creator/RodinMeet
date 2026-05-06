@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 // removido type Session
@@ -23,6 +24,19 @@ export function Room() {
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isHost, setIsHost] = useState(false);
+  const [controlGroup, setControlGroup] = useState<Element | null>(null);
+
+  useEffect(() => {
+    // Tenta encontrar o DOM do LiveKit ControlBar para injetar o gravador
+    const interval = setInterval(() => {
+      const el = document.querySelector('.lk-control-bar .lk-button-group');
+      if (el) {
+        setControlGroup(el);
+        clearInterval(interval);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: authSession } }) => {
@@ -84,43 +98,16 @@ export function Room() {
         const currentTitle = el.getAttribute('title');
         if (currentTitle && tooltips[currentTitle]) {
           el.setAttribute('title', tooltips[currentTitle]);
+          // Adicionar um atributo customizado para o CSS ler
+          el.setAttribute('data-lk-custom-title', tooltips[currentTitle]);
         }
       });
 
       // Botão de sair texto interno
       const leaveBtn = document.querySelector('.lk-disconnect-button');
-      if (leaveBtn && leaveBtn.textContent === 'Leave') {
-        leaveBtn.textContent = 'Sair';
-      }
-
-      // Tradução dos textos internos dos botões do ControlBar
-      const translations: Record<string, string> = {
-        'Microphone': 'Microfone',
-        'Camera': 'Câmera',
-        'Share screen': 'Compartilhar tela',
-        'Stop sharing': 'Parar compartilhamento',
-        'Chat': 'Bate-papo',
-        'Leave': 'Sair'
-      };
-
-      document.querySelectorAll('.lk-button').forEach((btn) => {
-        btn.childNodes.forEach((node) => {
-          if (node.nodeType === Node.TEXT_NODE && node.textContent) {
-            const originalText = node.textContent.trim();
-            if (translations[originalText]) {
-              node.textContent = node.textContent.replace(originalText, translations[originalText]);
-            }
-          }
-        });
-      });
-
-      // Mover o botão de gravação para a barra de controle
-      const controlGroup = document.querySelector('.lk-control-bar .lk-button-group');
-      const recorderBtn = document.querySelector('.recorder-wrapper');
-      if (controlGroup && recorderBtn && recorderBtn.parentElement !== controlGroup) {
-        controlGroup.appendChild(recorderBtn);
-        // Resetar o position para alinhar flex com os outros botões
-        (recorderBtn as HTMLElement).style.position = 'static';
+      if (leaveBtn && leaveBtn.getAttribute('title') !== 'Sair da sala') {
+        leaveBtn.setAttribute('title', 'Sair da sala');
+        leaveBtn.setAttribute('data-lk-custom-title', 'Sair da sala');
       }
     }, 1000);
 
@@ -207,8 +194,11 @@ export function Room() {
       style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
       onDisconnected={() => setToken('')}
     >
-      {/* Botão de gravar visível */}
-      <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
+      {/* Botão de gravar renderizado dentro do ControlBar via Portal se possível, caso contrário normalmente */}
+      {controlGroup 
+        ? createPortal(<RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />, controlGroup)
+        : <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
+      }
       
       <VideoConference />
       <RoomAudioRenderer />

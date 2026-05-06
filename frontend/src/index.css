@@ -323,3 +323,31 @@ button.danger:hover:not(:disabled) {
     display: none !important;
   }
 }
+
+/* Tradução segura dos textos do ControlBar via CSS */
+.lk-button[data-lk-custom-title] {
+  font-size: 0 !important; /* Oculta o texto original mantendo os ícones SVG inalterados se não usarem font-size */
+}
+
+/* Restaura o tamanho da fonte apenas para o nosso ::after */
+.lk-button[data-lk-custom-title]::after {
+  content: attr(data-lk-custom-title);
+  font-size: 14px !important;
+  margin-left: 6px;
+}
+
+/* Garantir que o texto do botão de Sair também seja traduzido via CSS */
+.lk-disconnect-button[data-lk-custom-title] {
+  font-size: 0 !important;
+}
+.lk-disconnect-button[data-lk-custom-title]::after {
+  content: attr(data-lk-custom-title);
+  font-size: 14px !important;
+  margin-left: 6px;
+}
+
+/* Quando o botão de gravar estiver dentro do ControlBar */
+.lk-button-group .recorder-wrapper {
+  position: static !important;
+}
+
