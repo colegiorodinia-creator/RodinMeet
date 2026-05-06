@@ -154,7 +154,6 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
           {toastMessage}
         </div>
       )}
-      {isRecording && <div className="recording-border"></div>}
       <div className="recorder-wrapper" style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
         {!isRecording ? (
           <button 
@@ -176,10 +175,11 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
               </>
             ) : (
               <>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent-color)">
-                  <circle cx="12" cy="12" r="10" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
                 </svg>
-                <span>Gravar</span>
+                <span style={{ marginLeft: '6px' }}>Gravar</span>
               </>
             )}
           </button>
@@ -187,16 +187,18 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
           <button 
             className="lk-button"
             onClick={stopRecording}
-            title="Parar Gravação"
+            title="Parar"
             style={{ 
-              cursor: 'pointer',
-              animation: 'recordingPulse 1.5s infinite'
+              background: 'rgba(255, 69, 58, 0.2)', 
+              color: '#ff453a', 
+              border: '1px solid #ff453a',
+              animation: 'recordingPulse 2s infinite ease-in-out'
             }}
           >
-             <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--danger-color)">
-               <rect x="6" y="6" width="12" height="12" rx="2" />
-             </svg>
-             <span>Parar</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <rect x="6" y="6" width="12" height="12" rx="2" />
+            </svg>
+            <span style={{ marginLeft: '6px' }}>Parar</span>
           </button>
         )}
       </div>

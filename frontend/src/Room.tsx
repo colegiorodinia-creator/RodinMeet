@@ -81,7 +81,7 @@ export function Room() {
         btn.textContent = 'Enviar';
       }
 
-      // Botões e Tooltips da Barra de Controle
+      // Botões e Tooltips da Barra de Controle (Tooltips via atributo title)
       const tooltips: Record<string, string> = {
         'Unmute microphone': 'Ligar microfone',
         'Mute microphone': 'Desligar microfone',
@@ -98,17 +98,33 @@ export function Room() {
         const currentTitle = el.getAttribute('title');
         if (currentTitle && tooltips[currentTitle]) {
           el.setAttribute('title', tooltips[currentTitle]);
-          // Adicionar um atributo customizado para o CSS ler
-          el.setAttribute('data-lk-custom-title', tooltips[currentTitle]);
         }
       });
 
-      // Botão de sair texto interno
-      const leaveBtn = document.querySelector('.lk-disconnect-button');
-      if (leaveBtn && leaveBtn.getAttribute('title') !== 'Sair da sala') {
-        leaveBtn.setAttribute('title', 'Sair da sala');
-        leaveBtn.setAttribute('data-lk-custom-title', 'Sair da sala');
-      }
+      // Tradução direta dos textos exibidos (Text Nodes)
+      const buttonTexts: Record<string, string> = {
+        'Share screen': 'Compartilhar tela',
+        'Stop sharing': 'Parar compartilhamento',
+        'Microphone': 'Microfone',
+        'Camera': 'Câmera',
+        'Chat': 'Bate-papo',
+        'Leave': 'Sair da sala',
+        'Settings': 'Configurações'
+      };
+
+      document.querySelectorAll('.lk-button, .lk-disconnect-button').forEach((btn) => {
+        const walk = (node: Node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const t = node.textContent?.trim();
+            if (t && buttonTexts[t]) {
+              node.textContent = buttonTexts[t];
+            }
+          } else {
+            node.childNodes.forEach(walk);
+          }
+        };
+        walk(btn);
+      });
     }, 1000);
 
     return () => clearInterval(translateUI);
