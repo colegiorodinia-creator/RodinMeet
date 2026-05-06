@@ -46,9 +46,9 @@ export function Room() {
     };
   }, []);
 
-  // Script para forçar tradução do Chat do LiveKit para PT-BR
+  // Script para forçar tradução dos componentes do LiveKit para PT-BR
   useEffect(() => {
-    const translateChat = setInterval(() => {
+    const translateUI = setInterval(() => {
       // Título do Chat
       const header = document.querySelector('.lk-chat-header');
       if (header && header.textContent === 'Messages') {
@@ -66,9 +66,35 @@ export function Room() {
       if (btn && btn.textContent === 'Send') {
         btn.textContent = 'Enviar';
       }
+
+      // Botões e Tooltips da Barra de Controle
+      const tooltips: Record<string, string> = {
+        'Unmute microphone': 'Ligar microfone',
+        'Mute microphone': 'Desligar microfone',
+        'Enable camera': 'Ligar câmera',
+        'Disable camera': 'Desligar câmera',
+        'Share screen': 'Compartilhar tela',
+        'Stop sharing screen': 'Parar compartilhamento',
+        'Leave': 'Sair da sala',
+        'Chat': 'Bate-papo',
+        'Settings': 'Configurações'
+      };
+
+      document.querySelectorAll('button[title]').forEach((el) => {
+        const currentTitle = el.getAttribute('title');
+        if (currentTitle && tooltips[currentTitle]) {
+          el.setAttribute('title', tooltips[currentTitle]);
+        }
+      });
+
+      // Botão de sair texto interno
+      const leaveBtn = document.querySelector('.lk-disconnect-button');
+      if (leaveBtn && leaveBtn.textContent === 'Leave') {
+        leaveBtn.textContent = 'Sair';
+      }
     }, 1000);
 
-    return () => clearInterval(translateChat);
+    return () => clearInterval(translateUI);
   }, []);
 
   const joinRoom = async (e?: React.FormEvent) => {

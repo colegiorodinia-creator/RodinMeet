@@ -142,7 +142,7 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
         </div>
       )}
       {isRecording && <div className="recording-border"></div>}
-      <div style={{ position: 'absolute', bottom: 12, left: 24, zIndex: 9999 }}>
+      <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
         <div className="liquid-glass" style={{ display: 'flex', alignItems: 'center', padding: '8px 8px', borderRadius: '999px', gap: '8px' }}>
           {!isRecording ? (
             <button 
@@ -151,7 +151,7 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
               disabled={isUploading}
               style={{ margin: 0, padding: '10px 20px', fontSize: '14px' }}
             >
-              {isUploading ? 'Enviando...' : 'Gravar Aula'}
+              {isUploading ? 'Enviando...' : 'Gravar'}
             </button>
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', padding: '0 8px', gap: '12px' }}>
