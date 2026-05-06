@@ -194,11 +194,11 @@ export function Room() {
       style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
       onDisconnected={() => setToken('')}
     >
-      {/* Botão de gravar renderizado dentro do ControlBar via Portal se possível, caso contrário normalmente */}
-      {controlGroup 
+      {/* Botão de gravar renderizado dentro do ControlBar via Portal se possível, apenas para Admin */}
+      {isHost && (controlGroup 
         ? createPortal(<RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />, controlGroup)
         : <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
-      }
+      )}
       
       <VideoConference />
       <RoomAudioRenderer />

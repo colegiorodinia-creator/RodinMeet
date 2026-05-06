@@ -349,5 +349,6 @@ button.danger:hover:not(:disabled) {
 /* Quando o botão de gravar estiver dentro do ControlBar */
 .lk-button-group .recorder-wrapper {
   position: static !important;
+  order: -1;
 }
 
