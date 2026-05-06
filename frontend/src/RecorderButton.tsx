@@ -23,18 +23,31 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
 
   const startRecording = async () => {
     try {
-      // Solicita a tela e o áudio do sistema (aba/outros participantes)
-      const displayStream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: true
-      });
+      let displayStream: MediaStream;
+      try {
+        if (navigator.mediaDevices.getDisplayMedia) {
+          displayStream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true
+          });
+        } else {
+          throw new Error('getDisplayMedia not supported');
+        }
+      } catch (err) {
+        console.warn('Gravação de tela falhou ou não suportada. Fazendo fallback para câmera.', err);
+        showToast('📱 Gravando apenas sua câmera (Tela não suportada no mobile).');
+        displayStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+      }
 
-      // Solicita o microfone do usuário
+      // Solicita o microfone do usuário (se não for fallback, pois o fallback já pegou)
       let micStream: MediaStream | null = null;
       try {
         micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       } catch (micErr) {
-        console.warn('Microfone não acessível, gravando apenas o áudio do sistema.', micErr);
+        console.warn('Microfone não acessível.', micErr);
       }
 
       // Mescla os áudios usando AudioContext, pois o MediaRecorder só pega a primeira track de áudio
@@ -145,51 +158,63 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
       <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
         {!isRecording ? (
           <button 
+            className="liquid-glass"
             onClick={startRecording} 
             disabled={isUploading}
             title={isUploading ? 'Enviando...' : 'Gravar'}
             style={{ 
               margin: 0, 
-              padding: '8px', 
-              background: 'transparent',
+              padding: '8px 16px', 
               border: 'none', 
               display: 'flex', 
               alignItems: 'center', 
-              justifyContent: 'center', 
+              justifyContent: 'center',
+              gap: '8px', 
               cursor: isUploading ? 'not-allowed' : 'pointer',
               opacity: isUploading ? 0.6 : 1,
-              filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))'
+              color: 'white',
+              fontWeight: 500
             }}
           >
             {isUploading ? (
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
-                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-              </svg>
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                </svg>
+                <span>Enviando...</span>
+              </>
             ) : (
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--accent-color)">
-                <circle cx="12" cy="12" r="10" />
-              </svg>
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent-color)">
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                <span>Gravar</span>
+              </>
             )}
           </button>
         ) : (
           <button 
+            className="liquid-glass"
             onClick={stopRecording}
             title="Parar Gravação"
             style={{ 
               margin: 0, 
-              padding: '8px', 
-              background: 'transparent',
+              padding: '8px 16px', 
               border: 'none', 
               display: 'flex', 
               alignItems: 'center', 
-              justifyContent: 'center', 
+              justifyContent: 'center',
+              gap: '8px', 
               cursor: 'pointer',
-              filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))'
+              color: 'white',
+              fontWeight: 500,
+              animation: 'recordingPulse 1.5s infinite'
             }}
           >
-             <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--danger-color)">
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--danger-color)">
                <rect x="6" y="6" width="12" height="12" rx="2" />
              </svg>
+             <span>Parar</span>
           </button>
         )}
       </div>
