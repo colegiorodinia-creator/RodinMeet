@@ -174,7 +174,7 @@ export function Room() {
       token={token}
       serverUrl={import.meta.env.VITE_LIVEKIT_URL || 'ws://localhost:7880'}
       data-lk-theme="default"
-      style={{ height: '100vh', position: 'relative' }}
+      style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
       onDisconnected={() => setToken('')}
     >
       {/* Apenas o anfitrião vê o botão de gravar */}

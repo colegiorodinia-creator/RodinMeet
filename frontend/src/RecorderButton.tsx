@@ -143,32 +143,56 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
       )}
       {isRecording && <div className="recording-border"></div>}
       <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
-        <div className="liquid-glass" style={{ display: 'flex', alignItems: 'center', padding: '8px 8px', borderRadius: '999px', gap: '8px' }}>
-          {!isRecording ? (
-            <button 
-              className="primary" 
-              onClick={startRecording} 
-              disabled={isUploading}
-              style={{ margin: 0, padding: '10px 20px', fontSize: '14px' }}
-            >
-              {isUploading ? 'Enviando...' : 'Gravar'}
-            </button>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', padding: '0 8px', gap: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--danger-color)', animation: 'recordingPulse 1s infinite' }} />
-                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>Gravando</span>
-              </div>
-              <button 
-                className="danger" 
-                onClick={stopRecording}
-                style={{ margin: 0, padding: '8px 16px', fontSize: '14px' }}
-              >
-                Parar
-              </button>
-            </div>
-          )}
-        </div>
+        {!isRecording ? (
+          <button 
+            className="liquid-glass" 
+            onClick={startRecording} 
+            disabled={isUploading}
+            title={isUploading ? 'Enviando...' : 'Gravar'}
+            style={{ 
+              margin: 0, 
+              padding: '12px', 
+              borderRadius: '50%', 
+              border: 'none', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              cursor: isUploading ? 'not-allowed' : 'pointer',
+              opacity: isUploading ? 0.6 : 1
+            }}
+          >
+            {isUploading ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--accent-color)">
+                <circle cx="12" cy="12" r="8" />
+              </svg>
+            )}
+          </button>
+        ) : (
+          <button 
+            className="liquid-glass" 
+            onClick={stopRecording}
+            title="Parar Gravação"
+            style={{ 
+              margin: 0, 
+              padding: '12px', 
+              borderRadius: '50%', 
+              border: 'none', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              cursor: 'pointer',
+              animation: 'recordingPulse 1.5s infinite'
+            }}
+          >
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--danger-color)">
+               <rect x="7" y="7" width="10" height="10" rx="2" />
+             </svg>
+          </button>
+        )}
       </div>
     </>
   );
