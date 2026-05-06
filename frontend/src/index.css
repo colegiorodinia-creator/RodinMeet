@@ -36,24 +36,33 @@
   padding: 0;
 }
 
+html, body, #root {
+  height: 100dvh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden !important;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
   font-family: var(--font-family);
-  min-height: 100vh;
-  overflow-x: hidden;
+  position: fixed; /* Previne pull-to-refresh e scroll bounce nativo de mobile */
+  top: 0;
+  left: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Fundo sutil com gradiente escuro premium */
   background-image: radial-gradient(circle at top right, #1a1a1f 0%, #000000 60%);
-  background-attachment: fixed;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100dvh;
   position: relative;
+  overflow: hidden;
 }
 
 /* 
@@ -197,6 +206,9 @@ button.danger:hover:not(:disabled) {
   --lk-accent-bg: var(--accent-color) !important;
   --lk-danger: var(--danger-color);
   font-family: var(--font-family);
+  height: 100dvh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
 }
 
 .lk-control-bar {

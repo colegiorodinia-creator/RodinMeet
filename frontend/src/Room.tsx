@@ -177,8 +177,8 @@ export function Room() {
       style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
       onDisconnected={() => setToken('')}
     >
-      {/* Apenas o anfitrião vê o botão de gravar */}
-      {isHost && <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />}
+      {/* Botão de gravar visível */}
+      <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
       
       <VideoConference />
       <RoomAudioRenderer />

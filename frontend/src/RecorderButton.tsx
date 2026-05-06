@@ -145,51 +145,50 @@ export const RecorderButton: React.FC<RecorderProps> = ({ meetingName, tag, host
       <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
         {!isRecording ? (
           <button 
-            className="liquid-glass" 
             onClick={startRecording} 
             disabled={isUploading}
             title={isUploading ? 'Enviando...' : 'Gravar'}
             style={{ 
               margin: 0, 
-              padding: '12px', 
-              borderRadius: '50%', 
+              padding: '8px', 
+              background: 'transparent',
               border: 'none', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
               cursor: isUploading ? 'not-allowed' : 'pointer',
-              opacity: isUploading ? 0.6 : 1
+              opacity: isUploading ? 0.6 : 1,
+              filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))'
             }}
           >
             {isUploading ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
                 <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
               </svg>
             ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--accent-color)">
-                <circle cx="12" cy="12" r="8" />
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--accent-color)">
+                <circle cx="12" cy="12" r="10" />
               </svg>
             )}
           </button>
         ) : (
           <button 
-            className="liquid-glass" 
             onClick={stopRecording}
             title="Parar Gravação"
             style={{ 
               margin: 0, 
-              padding: '12px', 
-              borderRadius: '50%', 
+              padding: '8px', 
+              background: 'transparent',
               border: 'none', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
               cursor: 'pointer',
-              animation: 'recordingPulse 1.5s infinite'
+              filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))'
             }}
           >
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--danger-color)">
-               <rect x="7" y="7" width="10" height="10" rx="2" />
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--danger-color)">
+               <rect x="6" y="6" width="12" height="12" rx="2" />
              </svg>
           </button>
         )}
