@@ -7,12 +7,22 @@ import { Home } from './Home';
 import { Room } from './Room';
 
 function App() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Checa Bypass Local
+    if (localStorage.getItem('rodin_bypass_auth') === 'true') {
+      setSession({ user: { user_metadata: { full_name: 'Anfitrião (Modo Offline)' } } });
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setLoading(false);
+    }).catch((error) => {
+      console.error('Erro ao obter sessão do Supabase:', error);
       setLoading(false);
     });
 
@@ -21,7 +31,7 @@ function App() {
     });
 
     return () => {
-      authListener.subscription.unsubscribe();
+      authListener?.subscription?.unsubscribe();
     };
   }, []);
 
