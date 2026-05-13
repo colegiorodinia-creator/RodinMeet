@@ -11,26 +11,42 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Checa Bypass Local
+    // Escuta evento de login forçado para não precisar recarregar a página
+    const handleForceLogin = () => {
+      setSession({ user: { user_metadata: { full_name: 'Anfitrião (Offline)' } } });
+    };
+    window.addEventListener('force_login', handleForceLogin);
+
+    // Checa Bypass Local inicial
     if (localStorage.getItem('rodin_bypass_auth') === 'true') {
-      setSession({ user: { user_metadata: { full_name: 'Anfitrião (Modo Offline)' } } });
+      handleForceLogin();
       setLoading(false);
-      return;
+      return () => window.removeEventListener('force_login', handleForceLogin);
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    }).catch((error) => {
-      console.error('Erro ao obter sessão do Supabase:', error);
-      setLoading(false);
-    });
+    // Tenta pegar a sessão do Supabase com timeout de 2 segundos para evitar tela de carregamento infinita
+    const fetchSession = async () => {
+      try {
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000));
+        const res = await Promise.race([supabase.auth.getSession(), timeout]) as any;
+        if (res && res.data && res.data.session) {
+          setSession(res.data.session);
+        }
+      } catch (err) {
+        console.warn('Supabase offline ou lento. Usando fallback.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
     return () => {
+      window.removeEventListener('force_login', handleForceLogin);
       authListener?.subscription?.unsubscribe();
     };
   }, []);
