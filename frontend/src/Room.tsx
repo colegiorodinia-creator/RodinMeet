@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-// removido type Session
 import '@livekit/components-styles';
 import {
   LiveKitRoom,
@@ -15,28 +13,12 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export function Room() {
   const { roomId } = useParams();
-  const [searchParams] = useSearchParams();
-  const tag = searchParams.get('tag') || 'interno';
   const navigate = useNavigate();
 
-  // removido session state
   const [participantName, setParticipantName] = useState('');
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [isHost, setIsHost] = useState(false);
-  const [controlGroup, setControlGroup] = useState<Element | null>(null);
-
-  useEffect(() => {
-    // Tenta encontrar o DOM do LiveKit ControlBar para injetar o gravador
-    const interval = setInterval(() => {
-      const el = document.querySelector('.lk-control-bar .lk-button-group');
-      if (el) {
-        setControlGroup(el);
-        clearInterval(interval);
-      }
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: authSession } }) => {
@@ -210,10 +192,9 @@ export function Room() {
       style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
       onDisconnected={() => setToken('')}
     >
-      {/* Botão de gravar renderizado dentro do ControlBar via Portal se possível, apenas para Admin */}
-      {isHost && (controlGroup 
-        ? createPortal(<RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />, controlGroup)
-        : <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
+      {/* Botão de gravar renderizado absoluto sobre a tela (Apenas para Admin) */}
+      {isHost && (
+        <RecorderButton meetingName={roomId || 'reuniao'} tag="interno" hostName={participantName} />
       )}
       
       <VideoConference />
