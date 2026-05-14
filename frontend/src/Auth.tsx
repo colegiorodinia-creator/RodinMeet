@@ -15,30 +15,14 @@ export const Auth: React.FC = () => {
     setErrorMsg(null);
     
     try {
-      // Cria uma promessa de timeout de 2 segundos para não travar a UI
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Failed to fetch')), 2000)
-      );
-
-      // Roda a requisição junto com o timeout
-      const res = await Promise.race([
-        supabase.auth.signInWithPassword({ email, password }),
-        timeoutPromise
-      ]) as any;
-
-      if (res.error) throw res.error;
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
     } catch (error: any) {
       console.error('Login error:', error);
-      
-      // FALLBACK DE EMERGÊNCIA SILENCIOSO
-      // Se o erro for de rede ou timeout, loga imediatamente sem alert()
-      if (error?.message === 'Failed to fetch' || error?.message === 'Falha ao buscar') {
-        localStorage.setItem('rodin_bypass_auth', 'true');
-        window.dispatchEvent(new CustomEvent('force_login'));
-        return; // Impede que o setLoading(false) execute e pisque a tela
-      } else {
-        setErrorMsg(error?.error_description || error?.message || 'Credenciais inválidas.');
-      }
+      setErrorMsg(error?.error_description || error?.message || 'Erro ao conectar com o servidor. Verifique sua internet.');
     } finally {
       setLoading(false);
     }
