@@ -11,6 +11,8 @@ import { RecorderButton } from './RecorderButton';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+import { ErrorBoundary } from './ErrorBoundary';
+
 export function Room() {
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
@@ -122,22 +124,24 @@ export function Room() {
   }
 
   return (
-    <LiveKitRoom
-      video={true}
-      audio={true}
-      token={token}
-      serverUrl={import.meta.env.VITE_LIVEKIT_URL || 'ws://localhost:7880'}
-      data-lk-theme="default"
-      style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
-      onDisconnected={() => setToken('')}
-    >
-      {/* Botão de gravar renderizado absoluto sobre a tela (Apenas para Admin) */}
-      {isHost && (
-        <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
-      )}
-      
-      <VideoConference />
-      <RoomAudioRenderer />
-    </LiveKitRoom>
+    <ErrorBoundary>
+      <LiveKitRoom
+        video={true}
+        audio={true}
+        token={token}
+        serverUrl={import.meta.env.VITE_LIVEKIT_URL || 'ws://localhost:7880'}
+        data-lk-theme="default"
+        style={{ height: '100dvh', position: 'relative', overflow: 'hidden' }}
+        onDisconnected={() => setToken('')}
+      >
+        {/* Botão de gravar renderizado absoluto sobre a tela (Apenas para Admin) */}
+        {isHost && (
+          <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
+        )}
+        
+        <VideoConference />
+        <RoomAudioRenderer />
+      </LiveKitRoom>
+    </ErrorBoundary>
   );
 }
