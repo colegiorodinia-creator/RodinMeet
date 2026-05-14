@@ -44,75 +44,7 @@ export function Room() {
     };
   }, []);
 
-  // Script para forçar tradução dos componentes do LiveKit para PT-BR
-  useEffect(() => {
-    const translateUI = setInterval(() => {
-      // Título do Chat
-      const header = document.querySelector('.lk-chat-header');
-      if (header && header.textContent === 'Messages') {
-        header.textContent = 'Mensagens';
-      }
-      
-      // Input do Chat
-      const input = document.querySelector('.lk-chat-form-input') as HTMLInputElement;
-      if (input && input.placeholder === 'Enter a message...') {
-        input.placeholder = 'Digite uma mensagem...';
-      }
 
-      // Botão de Enviar
-      const btn = document.querySelector('.lk-chat-form-button');
-      if (btn && btn.textContent === 'Send') {
-        btn.textContent = 'Enviar';
-      }
-
-      // Botões e Tooltips da Barra de Controle (Tooltips via atributo title)
-      const tooltips: Record<string, string> = {
-        'Unmute microphone': 'Ligar microfone',
-        'Mute microphone': 'Desligar microfone',
-        'Enable camera': 'Ligar câmera',
-        'Disable camera': 'Desligar câmera',
-        'Share screen': 'Compartilhar tela',
-        'Stop sharing screen': 'Parar compartilhamento',
-        'Leave': 'Sair da sala',
-        'Chat': 'Bate-papo',
-        'Settings': 'Configurações'
-      };
-
-      document.querySelectorAll('button[title]').forEach((el) => {
-        const currentTitle = el.getAttribute('title');
-        if (currentTitle && tooltips[currentTitle]) {
-          el.setAttribute('title', tooltips[currentTitle]);
-        }
-      });
-
-      // Tradução direta dos textos exibidos (Text Nodes)
-      const buttonTexts: Record<string, string> = {
-        'Share screen': 'Compartilhar tela',
-        'Stop sharing': 'Parar compartilhamento',
-        'Microphone': 'Microfone',
-        'Camera': 'Câmera',
-        'Chat': 'Bate-papo',
-        'Leave': 'Sair da sala',
-        'Settings': 'Configurações'
-      };
-
-      document.querySelectorAll('.lk-button, .lk-disconnect-button').forEach((btn) => {
-        const walk = (node: Node) => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const t = node.textContent?.trim();
-            if (t && buttonTexts[t]) {
-              node.textContent = buttonTexts[t];
-            }
-          } else {
-            node.childNodes.forEach(walk);
-          }
-        };
-        walk(btn);
-      });
-    }, 1000);
-
-    return () => clearInterval(translateUI);
-  }, []);
 
   const joinRoom = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
