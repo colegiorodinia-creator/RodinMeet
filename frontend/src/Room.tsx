@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import '@livekit/components-styles';
 import {
@@ -13,6 +13,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export function Room() {
   const { roomId } = useParams();
+  const [searchParams] = useSearchParams();
+  const tag = searchParams.get('tag') || 'interno';
   const navigate = useNavigate();
 
   const [participantName, setParticipantName] = useState('');
@@ -194,7 +196,7 @@ export function Room() {
     >
       {/* Botão de gravar renderizado absoluto sobre a tela (Apenas para Admin) */}
       {isHost && (
-        <RecorderButton meetingName={roomId || 'reuniao'} tag="interno" hostName={participantName} />
+        <RecorderButton meetingName={roomId || 'reuniao'} tag={tag} hostName={participantName} />
       )}
       
       <VideoConference />
