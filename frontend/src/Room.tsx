@@ -58,10 +58,15 @@ export function Room() {
         body: JSON.stringify({ roomName: roomId, participantName }),
       });
       const data = await response.json();
+      
+      if (!response.ok || !data.token) {
+        throw new Error(data.error || 'Erro desconhecido ao gerar token no servidor.');
+      }
+      
       setToken(data.token);
-    } catch (error) {
-      console.error('Erro ao conectar', error);
-      alert('Falha ao conectar no servidor.');
+    } catch (error: any) {
+      console.error('Erro ao conectar:', error);
+      alert(`Falha ao conectar no servidor: ${error.message}`);
     } finally {
       setLoading(false);
     }
