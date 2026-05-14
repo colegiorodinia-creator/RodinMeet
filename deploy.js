@@ -8,7 +8,7 @@ try {
   
   if (myApp) {
     console.log('Found App UUID:', myApp.uuid);
-    const cmd = `curl.exe -s -X POST -H "Authorization: Bearer 1|hhQrLiE0VdiJdfQG0nOVNlZiYnGLDAHT8xmMgHnd72b0b7e6" http://2.24.76.4:8000/api/v1/applications/${myApp.uuid}/start`;
+    const cmd = `curl.exe -s -X POST -H "Authorization: Bearer 1|hhQrLiE0VdiJdfQG0nOVNlZiYnGLDAHT8xmMgHnd72b0b7e6" "http://2.24.76.4:8000/api/v1/deploy?uuid=${myApp.uuid}&force=true"`;
     const result = execSync(cmd).toString();
     console.log('Deploy response:', result);
   } else {
