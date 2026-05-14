@@ -1,106 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-import { ChevronDown } from 'lucide-react';
-
-function CustomSelect({ options, value, onChange }: { options: {value: string, label: string}[], value: string, onChange: (val: string) => void }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  
-  const selectedOption = options.find(opt => opt.value === value);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div ref={dropdownRef} style={{ position: 'relative', width: '100%' }}>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '12px 16px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '12px',
-          color: '#fff',
-          fontSize: '15px',
-          cursor: 'pointer',
-          transition: 'all 0.2s ease'
-        }}
-      >
-        {selectedOption?.label}
-        <ChevronDown size={18} style={{ opacity: 0.6, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
-      </button>
-
-      {isOpen && (
-        <div 
-          className="liquid-glass custom-scrollbar"
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 8px)',
-            left: 0,
-            right: 0,
-            zIndex: 10,
-            padding: '8px',
-            borderRadius: '12px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '4px',
-            maxHeight: '220px',
-            overflowY: 'auto',
-            background: 'rgba(10, 10, 12, 0.96)',
-            backdropFilter: 'blur(24px)'
-          }}
-        >
-          {options.map((option) => (
-            <div
-              key={option.value}
-              onClick={() => {
-                onChange(option.value);
-                setIsOpen(false);
-              }}
-              style={{
-                padding: '10px 12px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                color: option.value === value ? '#fff' : 'rgba(255, 255, 255, 0.7)',
-                background: option.value === value ? 'var(--primary-color)' : 'transparent',
-                transition: 'all 0.2s ease',
-                fontSize: '14px',
-                fontWeight: option.value === value ? 500 : 400
-              }}
-              onMouseEnter={(e) => {
-                if (option.value !== value) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                  e.currentTarget.style.color = '#fff';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (option.value !== value) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
-                }
-              }}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 const TAGS = [
   { value: '6_ano', label: '6º ano' },
@@ -133,6 +33,7 @@ export function Home() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <h1 style={{ fontSize: '28px' }}>RodinMeet</h1>
           <button 
+            type="button"
             onClick={() => supabase.auth.signOut()} 
             style={{ background: 'transparent', color: 'var(--danger-color)', padding: 0, fontSize: '14px', textDecoration: 'underline' }}
           >
@@ -155,11 +56,27 @@ export function Home() {
 
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px' }}>Turma / Destino (Gravação)</label>
-            <CustomSelect 
-              options={TAGS} 
-              value={tag} 
-              onChange={(val) => setTag(val)} 
-            />
+            <select
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '14px 18px',
+                background: 'rgba(0, 0, 0, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: 'var(--text-primary)',
+                borderRadius: '14px',
+                fontSize: '1rem',
+                appearance: 'none', // hide default arrow to use custom or let it be
+                cursor: 'pointer'
+              }}
+            >
+              {TAGS.map(t => (
+                <option key={t.value} value={t.value} style={{ background: '#1c1c1e', color: '#fff' }}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <button type="submit" className="primary" style={{ marginTop: '10px' }}>
