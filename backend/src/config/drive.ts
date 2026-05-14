@@ -1,8 +1,13 @@
 import { google } from 'googleapis';
 import fs from 'fs';
 
+import path from 'path';
+
 // Configuração da autenticação usando OAuth2
 const SCOPES = ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive'];
+
+const CREDENTIALS_PATH = path.join(__dirname, '../../credentials.json');
+const TOKEN_PATH = path.join(__dirname, '../../token.json');
 
 async function getAuthClient() {
   try {
@@ -10,7 +15,7 @@ async function getAuthClient() {
     if (process.env.GOOGLE_CREDENTIALS_JSON) {
       credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON);
     } else {
-      const content = fs.readFileSync('./credentials.json', 'utf8');
+      const content = fs.readFileSync(CREDENTIALS_PATH, 'utf8');
       credentials = JSON.parse(content);
     }
     const { client_secret, client_id } = credentials.installed;
@@ -23,7 +28,7 @@ async function getAuthClient() {
     if (process.env.GOOGLE_TOKEN_JSON) {
       tokenData = JSON.parse(process.env.GOOGLE_TOKEN_JSON);
     } else {
-      const token = fs.readFileSync('./token.json', 'utf8');
+      const token = fs.readFileSync(TOKEN_PATH, 'utf8');
       tokenData = JSON.parse(token);
     }
     

@@ -36,8 +36,10 @@ COPY --from=builder /app/frontend/dist ./frontend/dist
 
 # Copy built backend
 COPY --from=builder /app/backend/dist ./backend/dist
-COPY --from=builder /app/backend/package.json ./backend/
+COPY --from=builder /app/backend/*.json ./backend/
 
+# Criar pasta de uploads para o multer
+RUN mkdir -p /app/uploads && chmod 777 /app/uploads
 # Expose backend port
 EXPOSE 5000
 
